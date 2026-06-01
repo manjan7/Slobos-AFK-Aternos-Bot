@@ -1090,24 +1090,24 @@ function formatUptime(seconds) {
 const SELF_PING_INTERVAL = 10 * 60 * 1000;
 
 function startSelfPing() {
+  // Support Render.com and Replit published deployments
   const renderUrl = process.env.RENDER_EXTERNAL_URL;
-  if (!renderUrl) {
-    addLog(
-      "[KeepAlive] No RENDER_EXTERNAL_URL set - self-ping disabled (running locally)",
-    );
+  const replitDomains = process.env.REPLIT_DOMAINS;
+  const selfUrl = renderUrl ||
+    (replitDomains ? `https://${replitDomains.split(",")[0].trim()}` : null);
+
+  if (!selfUrl) {
+    addLog("[KeepAlive] No external URL detected - self-ping disabled (running locally)");
     return;
   }
   setInterval(() => {
-    const protocol = renderUrl.startsWith("https") ? https : http;
-    protocol
-      .get(`${renderUrl}/ping`, (res) => {
-        // Silent success
-      })
+    https
+      .get(`${selfUrl}/ping`, () => { /* silent success */ })
       .on("error", (err) => {
         addLog(`[KeepAlive] Self-ping failed: ${err.message}`);
       });
   }, SELF_PING_INTERVAL);
-  addLog("[KeepAlive] Self-ping system started (every 10 min)");
+  addLog(`[KeepAlive] Self-ping started → ${selfUrl} (every 10 min)`);
 }
 
 startSelfPing();
@@ -1976,14 +1976,17 @@ function sendDiscordWebhook(content, color = 0x0099ff) {
 
 // ============================================================
 // CRASH RECOVERY - IMMORTAL MODE
-// FIX: guard against uncaughtException stacking reconnects when isReconnecting is already true
 // ============================================================
+
+// Suppress OS-level SIGPIPE so it never terminates the process before
+// Node.js can surface it as an EPIPE error event on the socket.
+process.on("SIGPIPE", () => {});
+
 process.on("uncaughtException", (err) => {
   const msg = err.message || "Unknown";
   addLog(`[FATAL] Uncaught Exception: ${msg}`);
   botState.errors.push({ type: "uncaught", message: msg, time: Date.now() });
 
-  // Cap errors array to prevent memory leak over long uptimes
   if (botState.errors.length > 100) {
     botState.errors = botState.errors.slice(-50);
   }
@@ -2001,17 +2004,20 @@ process.on("uncaughtException", (err) => {
     addLog("[FATAL] Known network/protocol error - recovering gracefully...");
   }
 
-  // ALWAYS recover — bot must never stay disconnected
   clearAllIntervals();
   botState.connected = false;
 
-  // FIX: reset isReconnecting if it was stuck, then schedule reconnect
+  // Clean up the bot instance so createBot() doesn't inherit a broken socket
+  if (bot) {
+    try { bot.removeAllListeners(); } catch (_) {}
+    try { bot.end(); } catch (_) {}
+    bot = null;
+  }
+
+  // Reset a stuck isReconnecting flag before scheduling
   if (isReconnecting) {
-    addLog(
-      "[FATAL] isReconnecting was stuck - resetting before crash recovery",
-    );
+    addLog("[FATAL] isReconnecting was stuck - resetting before crash recovery");
     isReconnecting = false;
-    // BUG FIX: was referencing non-existent 'reconnectTimeout' — correct name is 'reconnectTimeoutId'
     if (reconnectTimeoutId) {
       clearTimeout(reconnectTimeoutId);
       reconnectTimeoutId = null;
@@ -2019,9 +2025,7 @@ process.on("uncaughtException", (err) => {
   }
 
   setTimeout(
-    () => {
-      scheduleReconnect();
-    },
+    () => { scheduleReconnect(); },
     isNetworkError ? 5000 : 10000,
   );
 });
