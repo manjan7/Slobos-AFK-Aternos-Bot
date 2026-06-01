@@ -1164,11 +1164,12 @@ function addInterval(callback, delay) {
 }
 
 function getReconnectDelay() {
-  // Aternos server is offline/sleeping — back off for 5 minutes so we
-  // don't hammer a sleeping server and burn reconnect attempts.
+  // Aternos returned protocol -1 (server sleeping/starting up).
+  // Wait 60-90s then try again — short enough to catch the server
+  // coming back online before Aternos shuts it down permanently.
   if (botState.serverOffline) {
     botState.serverOffline = false;
-    const offlineDelay = 5 * 60 * 1000 + Math.floor(Math.random() * 60000);
+    const offlineDelay = 60000 + Math.floor(Math.random() * 30000);
     addLog(`[Bot] Server offline back-off: ${Math.round(offlineDelay / 1000)}s`);
     return offlineDelay;
   }
