@@ -1164,6 +1164,15 @@ function addInterval(callback, delay) {
 }
 
 function getReconnectDelay() {
+  // Aternos server is offline/sleeping — back off for 5 minutes so we
+  // don't hammer a sleeping server and burn reconnect attempts.
+  if (botState.serverOffline) {
+    botState.serverOffline = false;
+    const offlineDelay = 5 * 60 * 1000 + Math.floor(Math.random() * 60000);
+    addLog(`[Bot] Server offline back-off: ${Math.round(offlineDelay / 1000)}s`);
+    return offlineDelay;
+  }
+
   if (botState.wasThrottled) {
     botState.wasThrottled = false;
     const throttleDelay = 60000 + Math.floor(Math.random() * 60000);
@@ -1173,7 +1182,6 @@ function getReconnectDelay() {
     return throttleDelay;
   }
 
-  // FIX: read auto-reconnect-delay from settings as base delay
   const baseDelay = config.utils["auto-reconnect-delay"] || 3000;
   const maxDelay = config.utils["max-reconnect-delay"] || 30000;
   const delay = Math.min(
@@ -1268,13 +1276,30 @@ function createBot() {
         );
       }
 
-      // FIX: use bot.version (auto-detected) instead of config value so minecraft-data always matches
+      // Guard against server returning unsupported version (e.g. -1 when offline)
       const mcData = require("minecraft-data")(bot.version);
+      if (!mcData) {
+        addLog(`[Bot] minecraft-data has no data for version "${bot.version}" — aborting spawn`);
+        try { bot.end(); } catch (_) {}
+        return;
+      }
       const defaultMove = new Movements(bot, mcData);
       defaultMove.allowFreeMotion = false;
       defaultMove.canDig = false;
       defaultMove.liquidCost = 1000;
       defaultMove.fallDamageCost = 1000;
+
+      // Auto-respawn when the bot dies so it never sits on the death screen
+      bot.on("death", () => {
+        addLog("[Bot] Bot died — respawning in 2s...");
+        setTimeout(() => {
+          if (bot && botState.connected) {
+            try { bot.respawn(); } catch (e) {
+              addLog(`[Bot] Respawn error: ${e.message}`);
+            }
+          }
+        }, 2000);
+      });
 
       initializeModules(bot, mcData, defaultMove);
 
@@ -1359,6 +1384,18 @@ function createBot() {
       const msg = err.message || "";
       addLog(`[Bot] Error: ${msg}`);
       botState.errors.push({ type: "error", message: msg, time: Date.now() });
+
+      // When Aternos is offline/sleeping it returns protocol version -1.
+      // Mark this so getReconnectDelay() backs off for 5 minutes instead
+      // of hammering a sleeping server every 2 minutes.
+      if (
+        msg.includes("Unsupported protocol version") ||
+        msg.includes("protocol version '-1'") ||
+        msg.includes("protocol version \"-1\"")
+      ) {
+        botState.serverOffline = true;
+        addLog("[Bot] Aternos server appears offline — will wait 5 min before retrying");
+      }
       // Don't reconnect on error - let 'end' event handle it
     });
   } catch (err) {
@@ -1744,17 +1781,16 @@ function combatModule(bot, mcData) {
   let lockedTarget = null;
   let lockedTargetExpiry = 0;
 
-  // FIX: use physicsTick (not the deprecated physicTick)
   bot.on("physicsTick", () => {
     if (!bot || !botState.connected) return;
     if (!config.combat["attack-mobs"]) return;
 
     const now = Date.now();
-    // FIX: 1.9+ attack cooldown - respect at least 600ms between swings
+    // Respect 1.9+ attack cooldown
     if (now - lastAttackTime < 620) return;
 
     try {
-      // FIX: only pick a new target if current one is gone or lock expired
+      // Reuse locked target if it's still alive and close
       if (
         lockedTarget &&
         now < lockedTargetExpiry &&
@@ -1762,7 +1798,9 @@ function combatModule(bot, mcData) {
         lockedTarget.position
       ) {
         const dist = bot.entity.position.distanceTo(lockedTarget.position);
-        if (dist < 4) {
+        if (dist < 4.5) {
+          // Look at the mob's eye level so the hit actually registers
+          bot.lookAt(lockedTarget.position.offset(0, lockedTarget.height * 0.85, 0), true);
           bot.attack(lockedTarget);
           lastAttackTime = now;
           return;
@@ -1771,21 +1809,27 @@ function combatModule(bot, mcData) {
         }
       }
 
-      // Pick a new target
+      // Pick the closest hostile mob within 5 blocks
       const mobs = Object.values(bot.entities).filter(
         (e) =>
           e.type === "mob" &&
           e.position &&
-          bot.entity.position.distanceTo(e.position) < 4,
+          bot.entity.position.distanceTo(e.position) < 5,
       );
       if (mobs.length > 0) {
+        // Target the closest one
+        mobs.sort((a, b) =>
+          bot.entity.position.distanceTo(a.position) -
+          bot.entity.position.distanceTo(b.position)
+        );
         lockedTarget = mobs[0];
-        lockedTargetExpiry = now + 3000; // stick to same mob for 3 seconds
+        lockedTargetExpiry = now + 4000;
+        bot.lookAt(lockedTarget.position.offset(0, lockedTarget.height * 0.85, 0), true);
         bot.attack(lockedTarget);
         lastAttackTime = now;
       }
     } catch (e) {
-      addLog("[Combat] Error:", e.message);
+      addLog("[Combat] Error: " + e.message);
     }
   });
 
