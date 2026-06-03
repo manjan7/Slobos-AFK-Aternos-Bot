@@ -1220,7 +1220,7 @@ function getReconnectDelay() {
 
   if (botState.duplicateLogin) {
     botState.duplicateLogin = false;
-    const dupDelay = 30000 + Math.floor(Math.random() * 30000); // 30-60s
+    const dupDelay = 45000 + Math.floor(Math.random() * 30000); // 45-75s
     addLog(`[Bot] Duplicate-login back-off: ${Math.round(dupDelay / 1000)}s`);
     return dupDelay;
   }
@@ -1398,10 +1398,12 @@ function createBot() {
         reasonStr.includes("another location") ||
         reasonStr.includes("logged in from") ||
         reasonStr.includes("duplicate") ||
-        reasonStr.includes("already logged")
+        reasonStr.includes("already logged") ||
+        reasonStr.includes("already connected") ||
+        reasonStr.includes("proxy")
       ) {
         addLog(
-          "[Bot] Duplicate-login kick — waiting 30-60s before reconnecting",
+          "[Bot] Duplicate-login kick — waiting 45-75s before reconnecting",
         );
         botState.duplicateLogin = true;
       }
