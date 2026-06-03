@@ -1146,22 +1146,22 @@ function clearLeaveRejoinTimeout() {
   }
 }
 
-// Schedule a human-like leave after 3-5 hours, then rejoin in 1-5 seconds.
+// Leave the server every 3 hours for exactly 5 seconds, then rejoin.
+// The cycle restarts automatically after each successful spawn.
+const LEAVE_REJOIN_INTERVAL_MS = 3 * 60 * 60 * 1000; // 3 hours
+const LEAVE_REJOIN_OFFLINE_MS  = 5000;                // 5 seconds
+
 function scheduleLeaveRejoin() {
   clearLeaveRejoinTimeout();
-  const msIn3h = 3 * 60 * 60 * 1000;
-  const msIn5h = 5 * 60 * 60 * 1000;
-  const leaveAfter = msIn3h + Math.floor(Math.random() * (msIn5h - msIn3h));
-  const offlineMs  = 10000 + Math.floor(Math.random() * 20000); // 10-30 seconds offline
-  addLog(`[LeaveRejoin] Scheduled leave in ${Math.round(leaveAfter / 3600000 * 10) / 10}h (offline for ${Math.round(offlineMs / 1000)}s)`);
+  addLog(`[LeaveRejoin] Scheduled leave in 3h (offline for 5s)`);
 
   leaveRejoinTimeoutId = setTimeout(() => {
     leaveRejoinTimeoutId = null;
     if (!bot || !botState.connected) return;
-    scheduledLeaveReconnectMs = offlineMs;
-    addLog(`[LeaveRejoin] Leaving server — will rejoin in ${Math.round(offlineMs / 1000)}s`);
+    scheduledLeaveReconnectMs = LEAVE_REJOIN_OFFLINE_MS;
+    addLog(`[LeaveRejoin] Leaving server — will rejoin in 5s`);
     try { bot.quit(); } catch (_) {}
-  }, leaveAfter);
+  }, LEAVE_REJOIN_INTERVAL_MS);
 }
 
 function clearBotTimeouts() {
