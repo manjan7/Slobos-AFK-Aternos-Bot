@@ -1139,6 +1139,7 @@ let connectionTimeoutId = null;
 let leaveRejoinTimeoutId = null;
 let scheduledLeaveReconnectMs = 0; // set before bot.quit() so getReconnectDelay() uses it
 let isReconnecting = false;
+let isCreatingBot = false; // prevents two createBot() calls running simultaneously
 
 function clearLeaveRejoinTimeout() {
   if (leaveRejoinTimeoutId) {
@@ -1169,6 +1170,10 @@ function clearBotTimeouts() {
   if (reconnectTimeoutId) {
     clearTimeout(reconnectTimeoutId);
     reconnectTimeoutId = null;
+    // CRITICAL: the isReconnecting flag is only cleared inside the timeout
+    // callback. If we cancel the timeout, we MUST clear it here too or
+    // every future scheduleReconnect() call will silently return early.
+    isReconnecting = false;
   }
   if (connectionTimeoutId) {
     clearTimeout(connectionTimeoutId);
@@ -1246,10 +1251,11 @@ function getReconnectDelay() {
 }
 
 function createBot() {
-  if (isReconnecting) {
-    addLog("[Bot] Already reconnecting, skipping...");
+  if (isReconnecting || isCreatingBot) {
+    addLog("[Bot] Already connecting, skipping duplicate createBot() call.");
     return;
   }
+  isCreatingBot = true;
 
   // Cleanup previous bot properly to avoid ghost bots
   if (bot) {
@@ -1314,6 +1320,7 @@ function createBot() {
       botState.lastActivity = Date.now();
       botState.reconnectAttempts = 0;
       isReconnecting = false;
+      isCreatingBot = false;
 
       addLog(
         `[Bot] [+] Successfully spawned on server! (Version: ${bot.version})`,
@@ -1467,11 +1474,11 @@ function createBot() {
         botState.serverOffline = true;
         addLog("[Bot] Aternos server appears offline — will wait 5 min before retrying");
       }
-      // EPIPE = proxy closed the TCP socket while we still had a live session registered.
-      // Must wait ~2 minutes for the proxy to expire the stale session before reconnecting.
-      if (msg.includes("EPIPE")) {
+      // EPIPE / ECONNRESET = proxy force-closed the TCP socket while our old
+      // session was still registered. Wait 2 min for the proxy to expire it.
+      if (msg.includes("EPIPE") || msg.includes("ECONNRESET")) {
         botState.epipeDisconnect = true;
-        addLog("[Bot] EPIPE — proxy session still active, waiting 2 min before reconnect");
+        addLog("[Bot] EPIPE/ECONNRESET — proxy session active, waiting 2 min");
       }
 
       // Don't reconnect on error - let 'end' event handle it
@@ -1484,6 +1491,7 @@ function createBot() {
 
 function scheduleReconnect() {
   clearBotTimeouts();
+  isCreatingBot = false; // bot creation is over (success or failure); safe to create a new one after delay
 
   // FIX: don't stack reconnect if already waiting
   if (isReconnecting) {
