@@ -1134,7 +1134,34 @@ let bot = null;
 let activeIntervals = [];
 let reconnectTimeoutId = null;
 let connectionTimeoutId = null;
+let leaveRejoinTimeoutId = null;
+let scheduledLeaveReconnectMs = 0; // set before bot.quit() so getReconnectDelay() uses it
 let isReconnecting = false;
+
+function clearLeaveRejoinTimeout() {
+  if (leaveRejoinTimeoutId) {
+    clearTimeout(leaveRejoinTimeoutId);
+    leaveRejoinTimeoutId = null;
+  }
+}
+
+// Schedule a human-like leave after 3-5 hours, then rejoin in 1-5 seconds.
+function scheduleLeaveRejoin() {
+  clearLeaveRejoinTimeout();
+  const msIn3h = 3 * 60 * 60 * 1000;
+  const msIn5h = 5 * 60 * 60 * 1000;
+  const leaveAfter = msIn3h + Math.floor(Math.random() * (msIn5h - msIn3h));
+  const offlineMs  = 1000 + Math.floor(Math.random() * 4000); // 1-5 seconds offline
+  addLog(`[LeaveRejoin] Scheduled leave in ${Math.round(leaveAfter / 3600000 * 10) / 10}h (offline for ${Math.round(offlineMs / 1000)}s)`);
+
+  leaveRejoinTimeoutId = setTimeout(() => {
+    leaveRejoinTimeoutId = null;
+    if (!bot || !botState.connected) return;
+    scheduledLeaveReconnectMs = offlineMs;
+    addLog(`[LeaveRejoin] Leaving server — will rejoin in ${Math.round(offlineMs / 1000)}s`);
+    try { bot.quit(); } catch (_) {}
+  }, leaveAfter);
+}
 
 function clearBotTimeouts() {
   if (reconnectTimeoutId) {
@@ -1164,6 +1191,13 @@ function addInterval(callback, delay) {
 }
 
 function getReconnectDelay() {
+  // Scheduled human-like leave — use the exact offline duration chosen at schedule time
+  if (scheduledLeaveReconnectMs > 0) {
+    const delay = scheduledLeaveReconnectMs;
+    scheduledLeaveReconnectMs = 0;
+    return delay;
+  }
+
   // Aternos returned protocol -1 (server sleeping/starting up).
   // Wait 60-90s then try again — short enough to catch the server
   // coming back online before Aternos shuts it down permanently.
@@ -1290,6 +1324,9 @@ function createBot() {
       defaultMove.liquidCost = 1000;
       defaultMove.fallDamageCost = 1000;
 
+      // Schedule a human-like leave/rejoin every 3-5 hours
+      scheduleLeaveRejoin();
+
       // Auto-respawn when the bot dies so it never sits on the death screen
       bot.on("death", () => {
         addLog("[Bot] Bot died — respawning in 2s...");
@@ -1364,6 +1401,7 @@ function createBot() {
       addLog(`[Bot] Disconnected: ${reason || "Unknown reason"}`);
       botState.connected = false;
       clearAllIntervals();
+      clearLeaveRejoinTimeout();
       spawnHandled = false; // reset for next connection
 
       if (
