@@ -24,6 +24,7 @@ let botState = {
   startTime: Date.now(),
   errors: [],
   wasThrottled: false,
+  duplicateLogin: false,
 };
 
 // Health check endpoint for monitoring
@@ -1151,7 +1152,7 @@ function scheduleLeaveRejoin() {
   const msIn3h = 3 * 60 * 60 * 1000;
   const msIn5h = 5 * 60 * 60 * 1000;
   const leaveAfter = msIn3h + Math.floor(Math.random() * (msIn5h - msIn3h));
-  const offlineMs  = 1000 + Math.floor(Math.random() * 4000); // 1-5 seconds offline
+  const offlineMs  = 10000 + Math.floor(Math.random() * 20000); // 10-30 seconds offline
   addLog(`[LeaveRejoin] Scheduled leave in ${Math.round(leaveAfter / 3600000 * 10) / 10}h (offline for ${Math.round(offlineMs / 1000)}s)`);
 
   leaveRejoinTimeoutId = setTimeout(() => {
@@ -1215,6 +1216,13 @@ function getReconnectDelay() {
       `[Bot] Throttle detected - using extended delay: ${throttleDelay / 1000}s`,
     );
     return throttleDelay;
+  }
+
+  if (botState.duplicateLogin) {
+    botState.duplicateLogin = false;
+    const dupDelay = 30000 + Math.floor(Math.random() * 30000); // 30-60s
+    addLog(`[Bot] Duplicate-login back-off: ${Math.round(dupDelay / 1000)}s`);
+    return dupDelay;
   }
 
   const baseDelay = config.utils["auto-reconnect-delay"] || 3000;
@@ -1384,6 +1392,18 @@ function createBot() {
           "[Bot] Throttle kick detected - will use extended reconnect delay",
         );
         botState.wasThrottled = true;
+      }
+
+      if (
+        reasonStr.includes("another location") ||
+        reasonStr.includes("logged in from") ||
+        reasonStr.includes("duplicate") ||
+        reasonStr.includes("already logged")
+      ) {
+        addLog(
+          "[Bot] Duplicate-login kick — waiting 30-60s before reconnecting",
+        );
+        botState.duplicateLogin = true;
       }
 
       if (
