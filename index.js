@@ -25,6 +25,7 @@ let botState = {
   errors: [],
   wasThrottled: false,
   duplicateLogin: false,
+  epipeDisconnect: false,
 };
 
 // Health check endpoint for monitoring
@@ -1218,9 +1219,18 @@ function getReconnectDelay() {
     return throttleDelay;
   }
 
+  // EPIPE: proxy still has old session; wait 2 min for it to expire
+  if (botState.epipeDisconnect) {
+    botState.epipeDisconnect = false;
+    const epipeDelay = 120000 + Math.floor(Math.random() * 30000); // 2–2.5 min
+    addLog(`[Bot] EPIPE back-off: ${Math.round(epipeDelay / 1000)}s`);
+    return epipeDelay;
+  }
+
+  // "Already connected to proxy": session still held by BungeeCord; wait longer
   if (botState.duplicateLogin) {
     botState.duplicateLogin = false;
-    const dupDelay = 45000 + Math.floor(Math.random() * 30000); // 45-75s
+    const dupDelay = 120000 + Math.floor(Math.random() * 60000); // 2–3 min
     addLog(`[Bot] Duplicate-login back-off: ${Math.round(dupDelay / 1000)}s`);
     return dupDelay;
   }
@@ -1271,7 +1281,7 @@ function createBot() {
       port: config.server.port,
       version: botVersion,
       hideErrors: false,
-      checkTimeoutInterval: 600000,
+      checkTimeoutInterval: 60000,
     });
 
     bot.loadPlugin(pathfinder);
@@ -1457,6 +1467,13 @@ function createBot() {
         botState.serverOffline = true;
         addLog("[Bot] Aternos server appears offline — will wait 5 min before retrying");
       }
+      // EPIPE = proxy closed the TCP socket while we still had a live session registered.
+      // Must wait ~2 minutes for the proxy to expire the stale session before reconnecting.
+      if (msg.includes("EPIPE")) {
+        botState.epipeDisconnect = true;
+        addLog("[Bot] EPIPE — proxy session still active, waiting 2 min before reconnect");
+      }
+
       // Don't reconnect on error - let 'end' event handle it
     });
   } catch (err) {
