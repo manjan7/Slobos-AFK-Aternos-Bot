@@ -6,8 +6,8 @@
     "type": "offline"
   },
   "server": {
-    "ip": "stormsmps1-rfze.aternos.me",
-    "port": 39639,
+    "ip": "stormsmp-s1-a4jA.aternos.me",
+    "port": 41787,
     "version": "1.21.1",
     "try-creative": false
   },
