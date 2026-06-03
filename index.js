@@ -2185,4 +2185,12 @@ addLog(
 );
 addLog("=".repeat(50));
 
-createBot();
+// Only connect to Minecraft in the published deployment.
+// The dev environment runs the web server only — this prevents two instances
+// from fighting over the same username and causing rapid disconnect loops.
+if (process.env.REPLIT_DEPLOYMENT) {
+  createBot();
+} else {
+  addLog("[Dev] Running in dev mode — Minecraft bot is DISABLED here.");
+  addLog("[Dev] Publish the app to activate the bot in production.");
+}
