@@ -1189,10 +1189,12 @@ function getReconnectDelay() {
     return throttleDelay;
   }
 
-  // EPIPE: proxy still has our session; give it ~60s to expire
+  // EPIPE: server closed the connection. The BungeeCord proxy releases
+  // the player session immediately on a server-initiated close, so we
+  // only need a short wait before reconnecting (not the old 55-70s).
   if (botState.epipeDisconnect) {
     botState.epipeDisconnect = false;
-    const epipeDelay = 55000 + Math.floor(Math.random() * 15000); // 55–70s
+    const epipeDelay = 10000 + Math.floor(Math.random() * 10000); // 10–20s
     addLog(`[Bot] EPIPE back-off: ${Math.round(epipeDelay / 1000)}s`);
     return epipeDelay;
   }
@@ -1263,7 +1265,7 @@ function createBot() {
       port: config.server.port,
       version: botVersion,
       hideErrors: false,
-      checkTimeoutInterval: 60000,
+      checkTimeoutInterval: 120000,
     });
 
     bot.loadPlugin(pathfinder);
