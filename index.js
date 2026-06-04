@@ -1224,18 +1224,18 @@ function getReconnectDelay() {
     return throttleDelay;
   }
 
-  // EPIPE: proxy still has old session; wait 2 min for it to expire
+  // EPIPE: proxy still has our session; give it ~60s to expire
   if (botState.epipeDisconnect) {
     botState.epipeDisconnect = false;
-    const epipeDelay = 120000 + Math.floor(Math.random() * 30000); // 2–2.5 min
+    const epipeDelay = 55000 + Math.floor(Math.random() * 15000); // 55–70s
     addLog(`[Bot] EPIPE back-off: ${Math.round(epipeDelay / 1000)}s`);
     return epipeDelay;
   }
 
-  // "Already connected to proxy": session still held by BungeeCord; wait longer
+  // "Already connected to proxy": BungeeCord still holds old session
   if (botState.duplicateLogin) {
     botState.duplicateLogin = false;
-    const dupDelay = 120000 + Math.floor(Math.random() * 60000); // 2–3 min
+    const dupDelay = 30000 + Math.floor(Math.random() * 30000); // 30–60s
     addLog(`[Bot] Duplicate-login back-off: ${Math.round(dupDelay / 1000)}s`);
     return dupDelay;
   }
@@ -1474,11 +1474,13 @@ function createBot() {
         botState.serverOffline = true;
         addLog("[Bot] Aternos server appears offline — will wait 5 min before retrying");
       }
-      // EPIPE / ECONNRESET = proxy force-closed the TCP socket while our old
-      // session was still registered. Wait 2 min for the proxy to expire it.
-      if (msg.includes("EPIPE") || msg.includes("ECONNRESET")) {
+      // EPIPE = we wrote to a closed socket WHILE we were connected (playing).
+      // This means the proxy still has our old session → wait ~60s for it to expire.
+      // Do NOT treat ECONNRESET as EPIPE: ECONNRESET on connect = server offline/sleeping,
+      // which should retry quickly, not wait 2 minutes.
+      if (msg.includes("EPIPE") && botState.connected) {
         botState.epipeDisconnect = true;
-        addLog("[Bot] EPIPE/ECONNRESET — proxy session active, waiting 2 min");
+        addLog("[Bot] EPIPE — proxy session still active, waiting 60s");
       }
 
       // Don't reconnect on error - let 'end' event handle it
