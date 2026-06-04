@@ -26,6 +26,7 @@ let botState = {
   wasThrottled: false,
   duplicateLogin: false,
   epipeDisconnect: false,
+  consecutiveDuplicateLogins: 0,
 };
 
 // Health check endpoint for monitoring
@@ -1136,35 +1137,8 @@ let bot = null;
 let activeIntervals = [];
 let reconnectTimeoutId = null;
 let connectionTimeoutId = null;
-let leaveRejoinTimeoutId = null;
-let scheduledLeaveReconnectMs = 0; // set before bot.quit() so getReconnectDelay() uses it
 let isReconnecting = false;
 let isCreatingBot = false; // prevents two createBot() calls running simultaneously
-
-function clearLeaveRejoinTimeout() {
-  if (leaveRejoinTimeoutId) {
-    clearTimeout(leaveRejoinTimeoutId);
-    leaveRejoinTimeoutId = null;
-  }
-}
-
-// Leave the server every 3 hours for exactly 5 seconds, then rejoin.
-// The cycle restarts automatically after each successful spawn.
-const LEAVE_REJOIN_INTERVAL_MS = 3 * 60 * 60 * 1000; // 3 hours
-const LEAVE_REJOIN_OFFLINE_MS  = 5000;                // 5 seconds
-
-function scheduleLeaveRejoin() {
-  clearLeaveRejoinTimeout();
-  addLog(`[LeaveRejoin] Scheduled leave in 3h (offline for 5s)`);
-
-  leaveRejoinTimeoutId = setTimeout(() => {
-    leaveRejoinTimeoutId = null;
-    if (!bot || !botState.connected) return;
-    scheduledLeaveReconnectMs = LEAVE_REJOIN_OFFLINE_MS;
-    addLog(`[LeaveRejoin] Leaving server — will rejoin in 5s`);
-    try { bot.quit(); } catch (_) {}
-  }, LEAVE_REJOIN_INTERVAL_MS);
-}
 
 function clearBotTimeouts() {
   if (reconnectTimeoutId) {
@@ -1198,13 +1172,6 @@ function addInterval(callback, delay) {
 }
 
 function getReconnectDelay() {
-  // Scheduled human-like leave — use the exact offline duration chosen at schedule time
-  if (scheduledLeaveReconnectMs > 0) {
-    const delay = scheduledLeaveReconnectMs;
-    scheduledLeaveReconnectMs = 0;
-    return delay;
-  }
-
   // Aternos returned protocol -1 (server sleeping/starting up).
   // Wait 60-90s then try again — short enough to catch the server
   // coming back online before Aternos shuts it down permanently.
@@ -1218,9 +1185,7 @@ function getReconnectDelay() {
   if (botState.wasThrottled) {
     botState.wasThrottled = false;
     const throttleDelay = 60000 + Math.floor(Math.random() * 60000);
-    addLog(
-      `[Bot] Throttle detected - using extended delay: ${throttleDelay / 1000}s`,
-    );
+    addLog(`[Bot] Throttle detected - using extended delay: ${Math.round(throttleDelay / 1000)}s`);
     return throttleDelay;
   }
 
@@ -1232,11 +1197,22 @@ function getReconnectDelay() {
     return epipeDelay;
   }
 
-  // "Already connected to proxy": BungeeCord still holds old session
+  // "Already connected to proxy": BungeeCord still holds old session.
+  // Use exponential back-off — each retry may reset the proxy's session
+  // timer, so we wait progressively longer to let it expire naturally.
+  // Attempt 1-2: 90-120s  |  3-5: 2-3 min  |  6+: 4-5 min (cap)
   if (botState.duplicateLogin) {
     botState.duplicateLogin = false;
-    const dupDelay = 30000 + Math.floor(Math.random() * 30000); // 30–60s
-    addLog(`[Bot] Duplicate-login back-off: ${Math.round(dupDelay / 1000)}s`);
+    const n = botState.consecutiveDuplicateLogins;
+    let dupDelay;
+    if (n <= 2) {
+      dupDelay = 90000 + Math.floor(Math.random() * 30000);       // 90–120s
+    } else if (n <= 5) {
+      dupDelay = 150000 + Math.floor(Math.random() * 60000);      // 2.5–3.5 min
+    } else {
+      dupDelay = 240000 + Math.floor(Math.random() * 60000);      // 4–5 min
+    }
+    addLog(`[Bot] Duplicate-login back-off: ${Math.round(dupDelay / 1000)}s (cascade #${n})`);
     return dupDelay;
   }
 
@@ -1319,6 +1295,7 @@ function createBot() {
       botState.connected = true;
       botState.lastActivity = Date.now();
       botState.reconnectAttempts = 0;
+      botState.consecutiveDuplicateLogins = 0;
       isReconnecting = false;
       isCreatingBot = false;
 
@@ -1348,9 +1325,6 @@ function createBot() {
       defaultMove.canDig = false;
       defaultMove.liquidCost = 1000;
       defaultMove.fallDamageCost = 1000;
-
-      // Schedule a human-like leave/rejoin every 3-5 hours
-      scheduleLeaveRejoin();
 
       // Auto-respawn when the bot dies so it never sits on the death screen
       bot.on("death", () => {
@@ -1419,8 +1393,9 @@ function createBot() {
         reasonStr.includes("already connected") ||
         reasonStr.includes("proxy")
       ) {
+        botState.consecutiveDuplicateLogins++;
         addLog(
-          "[Bot] Duplicate-login kick — waiting 45-75s before reconnecting",
+          `[Bot] Duplicate-login kick — cascade #${botState.consecutiveDuplicateLogins}, waiting before reconnecting`,
         );
         botState.duplicateLogin = true;
       }
@@ -1440,7 +1415,6 @@ function createBot() {
       addLog(`[Bot] Disconnected: ${reason || "Unknown reason"}`);
       botState.connected = false;
       clearAllIntervals();
-      clearLeaveRejoinTimeout();
       spawnHandled = false; // reset for next connection
 
       if (
