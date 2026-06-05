@@ -1,0 +1,310 @@
+← Back to Dashboard
+Bot Logs
+Live output from the AFK bot
+
+300 entries
+bot.log
+[2:28:47 PM] [Cleanup] Clearing 0 intervals
+[2:28:47 PM] [Discord] Rate limited - skipping webhook
+[2:28:47 PM] [Bot] Reconnecting in 2.294s (attempt #1)
+[2:28:50 PM] [Cleanup] Clearing 0 intervals
+[2:28:50 PM] [Bot] Creating bot instance...
+[2:28:50 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:28:50 PM] [Bot] Using username: Slobot0052
+[2:29:28 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[2:29:28 PM] [Modules] Initializing all modules...
+[2:29:28 PM] [Modules] All modules initialized!
+[2:31:54 PM] [Bot] Kicked: {"type":"compound","value":{"color":{"type":"string","value":"red"},"text":{"type":"string","value":"An internal error occurred in your connection."}}}
+[2:31:54 PM] [Cleanup] Clearing 7 intervals
+[2:31:54 PM] [Bot] Disconnected: socketClosed
+[2:31:54 PM] [Cleanup] Clearing 0 intervals
+[2:31:54 PM] [Discord] Rate limited - skipping webhook
+[2:31:54 PM] [Bot] Reconnecting in 2.253s (attempt #1)
+[2:31:56 PM] [Cleanup] Clearing 0 intervals
+[2:31:56 PM] [Bot] Creating bot instance...
+[2:31:56 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:31:56 PM] [Bot] Using username: Slobot0071
+[2:32:28 PM] [Memory] Heap: 36.14 MB
+[2:34:09 PM] [Bot] Error: 
+[2:34:09 PM] [Bot] Disconnected: socketClosed
+[2:34:09 PM] [Cleanup] Clearing 0 intervals
+[2:34:09 PM] [Bot] Reconnecting in 5.972s (attempt #2)
+[2:34:15 PM] [Cleanup] Clearing 0 intervals
+[2:34:15 PM] [Bot] Creating bot instance...
+[2:34:15 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:34:15 PM] [Bot] Using username: Slobot0097
+[2:34:23 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[2:34:24 PM] [Modules] Initializing all modules...
+[2:34:24 PM] [Modules] All modules initialized!
+[2:37:28 PM] [Memory] Heap: 36.61 MB
+[2:37:32 PM] [Bot] Error: client timed out after 120000 milliseconds
+[2:38:02 PM] [Bot] Disconnected: keepAliveError
+[2:38:02 PM] [Cleanup] Clearing 7 intervals
+[2:38:02 PM] [Bot] keepAliveError = server went offline — waiting 5 min before retry
+[2:38:02 PM] [Bot] Server offline back-off: 351s (Aternos sleeping)
+[2:38:02 PM] [Bot] Reconnecting in 351.064s (attempt #1)
+[2:42:28 PM] [Memory] Heap: 36.75 MB
+[2:43:53 PM] [Cleanup] Clearing 0 intervals
+[2:43:53 PM] [Bot] Creating bot instance...
+[2:43:53 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:43:53 PM] [Bot] Using username: Slobot0039
+[2:43:57 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[2:43:57 PM] [Modules] Initializing all modules...
+[2:43:57 PM] [Modules] All modules initialized!
+[2:45:14 PM] [Bot] Error: read ECONNRESET
+[2:45:14 PM] [Bot] Disconnected: socketClosed
+[2:45:14 PM] [Cleanup] Clearing 7 intervals
+[2:45:14 PM] [Bot] Reconnecting in 2.657s (attempt #1)
+[2:45:17 PM] [Cleanup] Clearing 0 intervals
+[2:45:17 PM] [Bot] Creating bot instance...
+[2:45:17 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:45:17 PM] [Bot] Using username: Slobot0063
+[2:45:19 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[2:45:19 PM] [Discord] Rate limited - skipping webhook
+[2:45:19 PM] [Modules] Initializing all modules...
+[2:45:19 PM] [Modules] All modules initialized!
+[2:47:28 PM] [Memory] Heap: 36.45 MB
+[2:48:33 PM] [Bot] Kicked: {"type":"compound","value":{"color":{"type":"string","value":"red"},"text":{"type":"string","value":"An internal error occurred in your connection."}}}
+[2:48:33 PM] [Cleanup] Clearing 7 intervals
+[2:48:33 PM] [Bot] Disconnected: socketClosed
+[2:48:33 PM] [Cleanup] Clearing 0 intervals
+[2:48:33 PM] [Discord] Rate limited - skipping webhook
+[2:48:33 PM] [Bot] Reconnecting in 2.734s (attempt #1)
+[2:48:36 PM] [Cleanup] Clearing 0 intervals
+[2:48:36 PM] [Bot] Creating bot instance...
+[2:48:36 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:48:36 PM] [Bot] Using username: Slobot0023
+[2:48:36 PM] [Bot] Kicked: {"text":""}
+[2:48:36 PM] [Cleanup] Clearing 0 intervals
+[2:48:36 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[2:48:36 PM] [Discord] Rate limited - skipping webhook
+[2:48:36 PM] [Discord] Rate limited - skipping webhook
+[2:48:36 PM] [Bot] Disconnected: socketClosed
+[2:48:36 PM] [Cleanup] Clearing 0 intervals
+[2:48:36 PM] [Discord] Rate limited - skipping webhook
+[2:48:36 PM] [Bot] Server offline back-off: 336s (Aternos sleeping)
+[2:48:36 PM] [Bot] Reconnecting in 335.795s (attempt #2)
+[2:52:28 PM] [Memory] Heap: 37.64 MB
+[2:54:12 PM] [Cleanup] Clearing 0 intervals
+[2:54:12 PM] [Bot] Creating bot instance...
+[2:54:12 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[2:54:12 PM] [Bot] Using username: Slobot0040
+[2:54:25 PM] [Bot] Kicked: {"text":""}
+[2:54:25 PM] [Cleanup] Clearing 0 intervals
+[2:54:25 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[2:54:25 PM] [Discord] Rate limited - skipping webhook
+[2:54:25 PM] [Bot] Disconnected: socketClosed
+[2:54:25 PM] [Cleanup] Clearing 0 intervals
+[2:54:25 PM] [Discord] Rate limited - skipping webhook
+[2:54:25 PM] [Bot] Server offline back-off: 343s (Aternos sleeping)
+[2:54:25 PM] [Bot] Reconnecting in 342.546s (attempt #3)
+[2:57:28 PM] [Memory] Heap: 38.50 MB
+[3:00:07 PM] [Cleanup] Clearing 0 intervals
+[3:00:07 PM] [Bot] Creating bot instance...
+[3:00:07 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:00:07 PM] [Bot] Using username: Slobot0056
+[3:00:28 PM] [Bot] Kicked: {"text":""}
+[3:00:28 PM] [Cleanup] Clearing 0 intervals
+[3:00:28 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:00:28 PM] [Discord] Rate limited - skipping webhook
+[3:00:28 PM] [Bot] Disconnected: socketClosed
+[3:00:28 PM] [Cleanup] Clearing 0 intervals
+[3:00:28 PM] [Discord] Rate limited - skipping webhook
+[3:00:28 PM] [Bot] Server offline back-off: 307s (Aternos sleeping)
+[3:00:28 PM] [Bot] Reconnecting in 306.823s (attempt #4)
+[3:02:28 PM] [Memory] Heap: 39.28 MB
+[3:05:35 PM] [Cleanup] Clearing 0 intervals
+[3:05:35 PM] [Bot] Creating bot instance...
+[3:05:35 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:05:35 PM] [Bot] Using username: Slobot0083
+[3:07:28 PM] [Memory] Heap: 40.03 MB
+[3:07:49 PM] [Bot] Error: 
+[3:07:49 PM] [Bot] Disconnected: socketClosed
+[3:07:49 PM] [Cleanup] Clearing 0 intervals
+[3:07:49 PM] [Bot] Reconnecting in 16.805s (attempt #5)
+[3:08:05 PM] [Cleanup] Clearing 0 intervals
+[3:08:05 PM] [Bot] Creating bot instance...
+[3:08:05 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:08:05 PM] [Bot] Using username: Slobot0062
+[3:09:15 PM] [Bot] Kicked: {"text":""}
+[3:09:15 PM] [Cleanup] Clearing 0 intervals
+[3:09:15 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:09:15 PM] [Discord] Rate limited - skipping webhook
+[3:09:15 PM] [Bot] Disconnected: socketClosed
+[3:09:15 PM] [Cleanup] Clearing 0 intervals
+[3:09:15 PM] [Discord] Rate limited - skipping webhook
+[3:09:15 PM] [Bot] Server offline back-off: 308s (Aternos sleeping)
+[3:09:15 PM] [Bot] Reconnecting in 308.182s (attempt #6)
+[3:12:28 PM] [Memory] Heap: 41.39 MB
+[3:14:23 PM] [Cleanup] Clearing 0 intervals
+[3:14:23 PM] [Bot] Creating bot instance...
+[3:14:23 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:14:23 PM] [Bot] Using username: Slobot0024
+[3:16:37 PM] [Bot] Error: 
+[3:16:37 PM] [Bot] Disconnected: socketClosed
+[3:16:37 PM] [Cleanup] Clearing 0 intervals
+[3:16:37 PM] [Bot] Reconnecting in 16.587s (attempt #7)
+[3:16:54 PM] [Cleanup] Clearing 0 intervals
+[3:16:54 PM] [Bot] Creating bot instance...
+[3:16:54 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:16:54 PM] [Bot] Using username: Slobot0052
+[3:16:55 PM] [Bot] Kicked: {"text":""}
+[3:16:55 PM] [Cleanup] Clearing 0 intervals
+[3:16:55 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:16:55 PM] [Discord] Rate limited - skipping webhook
+[3:16:55 PM] [Bot] Disconnected: socketClosed
+[3:16:55 PM] [Cleanup] Clearing 0 intervals
+[3:16:55 PM] [Discord] Rate limited - skipping webhook
+[3:16:55 PM] [Bot] Server offline back-off: 304s (Aternos sleeping)
+[3:16:55 PM] [Bot] Reconnecting in 303.845s (attempt #8)
+[3:17:28 PM] [Memory] Heap: 42.77 MB
+[3:21:59 PM] [Cleanup] Clearing 0 intervals
+[3:21:59 PM] [Bot] Creating bot instance...
+[3:21:59 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:21:59 PM] [Bot] Using username: Slobot0073
+[3:22:28 PM] [Memory] Heap: 34.94 MB
+[3:23:38 PM] [Bot] Disconnected: socketClosed
+[3:23:38 PM] [Cleanup] Clearing 0 intervals
+[3:23:38 PM] [Bot] Reconnecting in 15.467s (attempt #9)
+[3:23:53 PM] [Cleanup] Clearing 0 intervals
+[3:23:53 PM] [Bot] Creating bot instance...
+[3:23:53 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:23:53 PM] [Bot] Using username: Slobot0060
+[3:23:54 PM] [Bot] Kicked: {"text":""}
+[3:23:54 PM] [Cleanup] Clearing 0 intervals
+[3:23:54 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:23:54 PM] [Discord] Rate limited - skipping webhook
+[3:23:54 PM] [Bot] Disconnected: socketClosed
+[3:23:54 PM] [Cleanup] Clearing 0 intervals
+[3:23:54 PM] [Discord] Rate limited - skipping webhook
+[3:23:54 PM] [Bot] Server offline back-off: 317s (Aternos sleeping)
+[3:23:54 PM] [Bot] Reconnecting in 317.378s (attempt #10)
+[3:27:28 PM] [Memory] Heap: 35.98 MB
+[3:29:11 PM] [Cleanup] Clearing 0 intervals
+[3:29:11 PM] [Bot] Creating bot instance...
+[3:29:11 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:29:11 PM] [Bot] Using username: Slobot0068
+[3:29:32 PM] [Bot] Kicked: {"text":""}
+[3:29:32 PM] [Cleanup] Clearing 0 intervals
+[3:29:32 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:29:32 PM] [Discord] Rate limited - skipping webhook
+[3:29:32 PM] [Bot] Disconnected: socketClosed
+[3:29:32 PM] [Cleanup] Clearing 0 intervals
+[3:29:32 PM] [Discord] Rate limited - skipping webhook
+[3:29:32 PM] [Bot] Server offline back-off: 317s (Aternos sleeping)
+[3:29:32 PM] [Bot] Reconnecting in 316.982s (attempt #11)
+[3:32:28 PM] [Memory] Heap: 36.80 MB
+[3:34:49 PM] [Cleanup] Clearing 0 intervals
+[3:34:49 PM] [Bot] Creating bot instance...
+[3:34:49 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:34:49 PM] [Bot] Using username: Slobot0034
+[3:37:02 PM] [Bot] Error: 
+[3:37:02 PM] [Bot] Disconnected: socketClosed
+[3:37:02 PM] [Cleanup] Clearing 0 intervals
+[3:37:02 PM] [Bot] Reconnecting in 15.209s (attempt #12)
+[3:37:17 PM] [Cleanup] Clearing 0 intervals
+[3:37:17 PM] [Bot] Creating bot instance...
+[3:37:17 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:37:17 PM] [Bot] Using username: Slobot0015
+[3:37:17 PM] [Bot] Kicked: {"text":""}
+[3:37:17 PM] [Cleanup] Clearing 0 intervals
+[3:37:17 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:37:17 PM] [Discord] Rate limited - skipping webhook
+[3:37:17 PM] [Bot] Disconnected: socketClosed
+[3:37:17 PM] [Cleanup] Clearing 0 intervals
+[3:37:17 PM] [Discord] Rate limited - skipping webhook
+[3:37:17 PM] [Bot] Server offline back-off: 303s (Aternos sleeping)
+[3:37:17 PM] [Bot] Reconnecting in 302.762s (attempt #13)
+[3:37:28 PM] [Memory] Heap: 38.44 MB
+[3:42:20 PM] [Cleanup] Clearing 0 intervals
+[3:42:20 PM] [Bot] Creating bot instance...
+[3:42:20 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:42:20 PM] [Bot] Using username: Slobot0036
+[3:42:28 PM] [Memory] Heap: 39.70 MB
+[3:42:33 PM] [Bot] Kicked: {"text":""}
+[3:42:33 PM] [Cleanup] Clearing 0 intervals
+[3:42:33 PM] [Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry
+[3:42:33 PM] [Discord] Rate limited - skipping webhook
+[3:42:33 PM] [Bot] Disconnected: socketClosed
+[3:42:33 PM] [Cleanup] Clearing 0 intervals
+[3:42:33 PM] [Discord] Rate limited - skipping webhook
+[3:42:33 PM] [Bot] Server offline back-off: 338s (Aternos sleeping)
+[3:42:33 PM] [Bot] Reconnecting in 337.856s (attempt #14)
+[3:47:28 PM] [Memory] Heap: 39.59 MB
+[3:48:10 PM] [Cleanup] Clearing 0 intervals
+[3:48:10 PM] [Bot] Creating bot instance...
+[3:48:10 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:48:10 PM] [Bot] Using username: Slobot0015
+[3:50:25 PM] [Bot] Error: 
+[3:50:25 PM] [Bot] Disconnected: socketClosed
+[3:50:25 PM] [Cleanup] Clearing 0 intervals
+[3:50:25 PM] [Bot] Reconnecting in 15.271s (attempt #15)
+[3:50:40 PM] [Cleanup] Clearing 0 intervals
+[3:50:40 PM] [Bot] Creating bot instance...
+[3:50:40 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:50:40 PM] [Bot] Using username: Slobot0049
+[3:51:18 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[3:51:18 PM] [Modules] Initializing all modules...
+[3:51:18 PM] [Modules] All modules initialized!
+[3:52:28 PM] [Memory] Heap: 35.93 MB
+[3:53:46 PM] [Bot] Error: client timed out after 120000 milliseconds
+[3:54:16 PM] [Bot] Disconnected: keepAliveError
+[3:54:16 PM] [Cleanup] Clearing 7 intervals
+[3:54:16 PM] [Bot] keepAliveError = server went offline — waiting 5 min before retry
+[3:54:16 PM] [Bot] Server offline back-off: 301s (Aternos sleeping)
+[3:54:16 PM] [Bot] Reconnecting in 301.377s (attempt #1)
+[3:57:28 PM] [Memory] Heap: 36.60 MB
+[3:59:18 PM] [Cleanup] Clearing 0 intervals
+[3:59:18 PM] [Bot] Creating bot instance...
+[3:59:18 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[3:59:18 PM] [Bot] Using username: Slobot0019
+[3:59:20 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[3:59:20 PM] [Modules] Initializing all modules...
+[3:59:20 PM] [Modules] All modules initialized!
+[4:01:26 PM] [Bot] Kicked: {"type":"compound","value":{"color":{"type":"string","value":"red"},"text":{"type":"string","value":"An internal error occurred in your connection."}}}
+[4:01:26 PM] [Cleanup] Clearing 7 intervals
+[4:01:26 PM] [Bot] Disconnected: socketClosed
+[4:01:26 PM] [Cleanup] Clearing 0 intervals
+[4:01:26 PM] [Discord] Rate limited - skipping webhook
+[4:01:26 PM] [Bot] Reconnecting in 3.997s (attempt #1)
+[4:01:30 PM] [Cleanup] Clearing 0 intervals
+[4:01:30 PM] [Bot] Creating bot instance...
+[4:01:30 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[4:01:30 PM] [Bot] Using username: Slobot0099
+[4:01:32 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[4:01:32 PM] [Modules] Initializing all modules...
+[4:01:32 PM] [Modules] All modules initialized!
+[4:02:28 PM] [Memory] Heap: 36.91 MB
+[4:04:34 PM] [Bot] Error: read ECONNRESET
+[4:04:34 PM] [Bot] Disconnected: socketClosed
+[4:04:34 PM] [Cleanup] Clearing 7 intervals
+[4:04:34 PM] [Bot] Reconnecting in 3.62s (attempt #1)
+[4:04:38 PM] [Cleanup] Clearing 0 intervals
+[4:04:38 PM] [Bot] Creating bot instance...
+[4:04:38 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[4:04:38 PM] [Bot] Using username: Slobot0027
+[4:06:52 PM] [Bot] Error: 
+[4:06:52 PM] [Bot] Disconnected: socketClosed
+[4:06:52 PM] [Cleanup] Clearing 0 intervals
+[4:06:52 PM] [Bot] Reconnecting in 5.697s (attempt #2)
+[4:06:57 PM] [Cleanup] Clearing 0 intervals
+[4:06:57 PM] [Bot] Creating bot instance...
+[4:06:57 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[4:06:57 PM] [Bot] Using username: Slobot0071
+[4:07:28 PM] [Memory] Heap: 35.23 MB
+[4:07:30 PM] [Bot] Error: read ECONNRESET
+[4:07:30 PM] [Bot] Disconnected: socketClosed
+[4:07:30 PM] [Cleanup] Clearing 0 intervals
+[4:07:30 PM] [Bot] Reconnecting in 8.063s (attempt #3)
+[4:07:38 PM] [Cleanup] Clearing 0 intervals
+[4:07:38 PM] [Bot] Creating bot instance...
+[4:07:38 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[4:07:38 PM] [Bot] Using username: Slobot0062
+[4:08:46 PM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[4:08:46 PM] [Modules] Initializing all modules...
+[4:08:46 PM] [Modules] All modules initialized!
+[4:12:13 PM] [Bot] Error: client timed out after 120000 milliseconds
+Type / for commands, or any message…
+Send
+Auto-refreshing every 5 seconds
+AFK Bot Dashboard · AFK Bot

@@ -477,6 +477,33 @@ app.get("/health", (req, res) => {
   });
 });
 
+app.get("/info", (req, res) => {
+  const uptimeSec = Math.floor((Date.now() - botState.startTime) / 1000);
+  const h = Math.floor(uptimeSec / 3600);
+  const m = Math.floor((uptimeSec % 3600) / 60);
+  const s = uptimeSec % 60;
+  const webhookConfigured =
+    config.discord &&
+    config.discord.webhookUrl &&
+    !config.discord.webhookUrl.includes("YOUR_DISCORD");
+
+  res.json({
+    bot: {
+      status: botState.connected ? "🟢 connected" : "🔴 disconnected",
+      username: bot ? bot.username : config["bot-account"].username,
+      server: config.server.ip.replace(/[^.]+\.aternos\.me/, "[hidden].aternos.me"),
+      uptime: `${h}h ${m}m ${s}s`,
+      reconnectAttempts: botState.reconnectAttempts,
+    },
+    discord: {
+      enabled: !!(config.discord && config.discord.enabled),
+      webhookConfigured: webhookConfigured,
+      alerts: config.discord ? config.discord.events : {},
+    },
+    memory: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(1)} MB`,
+  });
+});
+
 app.get("/ping", (req, res) => res.send("pong"));
 
 app.get("/logs", (req, res) => {
@@ -1155,9 +1182,11 @@ function clearBotTimeouts() {
   }
 }
 
-// FIX: Discord rate limiting - track last send time
-let lastDiscordSend = 0;
-const DISCORD_RATE_LIMIT_MS = 5000; // min 5s between webhook calls
+// Discord rate limiting - separate buckets so critical alerts (offline/sleeping)
+// always get through even when reconnect spam would block them.
+let lastDiscordSend = { general: 0, offline: 0 };
+const DISCORD_RATE_LIMIT_MS = 30000;  // 30s between general alerts (connect/disconnect)
+const DISCORD_OFFLINE_RATE_LIMIT_MS = 60000; // 60s between offline/sleeping alerts
 
 function clearAllIntervals() {
   addLog(`[Cleanup] Clearing ${activeIntervals.length} intervals`);
@@ -1400,8 +1429,15 @@ function createBot() {
         botState.serverOffline = true;
         addLog("[Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry");
         if (config.discord && config.discord.enabled) {
-          sendDiscordWebhook(`😴 **Server is sleeping** — Aternos shut down. Bot will retry in 5 minutes.`, 0xfbbf24);
+          sendDiscordWebhook(`😴 **Server is sleeping** — Aternos shut down. Bot will retry in 5 minutes.`, 0xfbbf24, "offline");
         }
+      }
+
+      // "An internal error occurred" = Aternos BungeeCord backend crashed.
+      // Wait 30s for the backend to restart before reconnecting.
+      if (reasonStr.includes("internal error")) {
+        botState.wasThrottled = true;
+        addLog("[Bot] Aternos internal error — waiting 30s for backend to restart");
       }
 
       if (
@@ -1446,10 +1482,10 @@ function createBot() {
         botState.serverOffline = true;
         addLog("[Bot] keepAliveError = server went offline — waiting 5 min before retry");
         if (config.discord && config.discord.enabled) {
-          sendDiscordWebhook(`😴 **Server went offline** — bot will retry in 5 minutes.`, 0xfbbf24);
+          sendDiscordWebhook(`😴 **Server went offline** — bot will retry in 5 minutes.`, 0xfbbf24, "offline");
         }
       } else if (config.discord && config.discord.events && config.discord.events.disconnect) {
-        sendDiscordWebhook(`🔴 **Bot Disconnected** — reconnecting soon...`, 0xf87171);
+        sendDiscordWebhook(`🔴 **Bot Disconnected** — reconnecting soon...`, 0xf87171, "general");
       }
 
       // ALWAYS reconnect — bot must never leave the server
@@ -2049,7 +2085,8 @@ rl.on("line", (line) => {
 // FIX: use Buffer.byteLength for Content-Length (handles non-ASCII usernames correctly)
 // FIX: rate limiting to avoid spam when bot is flapping
 // ============================================================
-function sendDiscordWebhook(content, color = 0x0099ff) {
+// priority: "general" (connect/disconnect) | "offline" (sleeping/crashed)
+function sendDiscordWebhook(content, color = 0x0099ff, priority = "general") {
   if (
     !config.discord ||
     !config.discord.enabled ||
@@ -2058,13 +2095,14 @@ function sendDiscordWebhook(content, color = 0x0099ff) {
   )
     return;
 
-  // FIX: Discord rate limiting - skip if sent too recently
   const now = Date.now();
-  if (now - lastDiscordSend < DISCORD_RATE_LIMIT_MS) {
-    addLog("[Discord] Rate limited - skipping webhook");
+  const bucket = priority === "offline" ? "offline" : "general";
+  const limit = bucket === "offline" ? DISCORD_OFFLINE_RATE_LIMIT_MS : DISCORD_RATE_LIMIT_MS;
+  if (now - lastDiscordSend[bucket] < limit) {
+    addLog(`[Discord] Rate limited (${bucket}) - skipping webhook`);
     return;
   }
-  lastDiscordSend = now;
+  lastDiscordSend[bucket] = now;
 
   const protocol = config.discord.webhookUrl.startsWith("https") ? https : http;
   const urlParts = new URL(config.discord.webhookUrl);
