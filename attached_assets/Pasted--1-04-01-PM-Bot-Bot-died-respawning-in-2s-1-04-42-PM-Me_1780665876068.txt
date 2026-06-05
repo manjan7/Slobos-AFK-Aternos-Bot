@@ -1,0 +1,83 @@
+[1:04:01 PM] [Bot] Bot died — respawning in 2s...
+[1:04:42 PM] [Memory] Heap: 40.52 MB
+[1:06:31 PM] [Bot] Error: client timed out after 120000 milliseconds
+[1:07:01 PM] [Bot] Disconnected: keepAliveError
+[1:07:01 PM] [Cleanup] Clearing 7 intervals
+[1:07:01 PM] [Bot] Reconnecting in 2.08s (attempt #1)
+[1:07:03 PM] [Cleanup] Clearing 0 intervals
+[1:07:03 PM] [Bot] Creating bot instance...
+[1:07:03 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:07:03 PM] [Bot] Using username: Slobot0089
+[1:09:20 PM] [Bot] Error: connect ETIMEDOUT 193.56.156.156:41787
+[1:09:20 PM] [Bot] Disconnected: socketClosed
+[1:09:20 PM] [Cleanup] Clearing 0 intervals
+[1:09:20 PM] [Bot] Reconnecting in 4.799s (attempt #2)
+[1:09:24 PM] [Cleanup] Clearing 0 intervals
+[1:09:24 PM] [Bot] Creating bot instance...
+[1:09:24 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:09:24 PM] [Bot] Using username: Slobot0041
+[1:09:42 PM] [Memory] Heap: 41.27 MB
+[1:11:39 PM] [Bot] Error: connect ETIMEDOUT 193.56.156.156:41787
+[1:11:39 PM] [Bot] Disconnected: socketClosed
+[1:11:39 PM] [Cleanup] Clearing 0 intervals
+[1:11:39 PM] [Bot] Reconnecting in 9.801s (attempt #3)
+[1:11:49 PM] [Cleanup] Clearing 0 intervals
+[1:11:49 PM] [Bot] Creating bot instance...
+[1:11:49 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:11:49 PM] [Bot] Using username: Slobot0089
+[1:11:50 PM] [Bot] Kicked: {"text":""}
+[1:11:50 PM] [Cleanup] Clearing 0 intervals
+[1:11:50 PM] [Bot] Disconnected: socketClosed
+[1:11:50 PM] [Cleanup] Clearing 0 intervals
+[1:11:50 PM] [Bot] Reconnecting in 16.012s (attempt #4)
+[1:12:06 PM] [Cleanup] Clearing 0 intervals
+[1:12:06 PM] [Bot] Creating bot instance...
+[1:12:06 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:12:06 PM] [Bot] Using username: Slobot0082
+[1:13:15 PM] [Bot] Kicked: {"text":""}
+[1:13:15 PM] [Cleanup] Clearing 0 intervals
+[1:13:15 PM] [Bot] Disconnected: socketClosed
+[1:13:15 PM] [Cleanup] Clearing 0 intervals
+[1:13:15 PM] [Bot] Reconnecting in 16.069s (attempt #5)
+[1:13:31 PM] [Cleanup] Clearing 0 intervals
+[1:13:31 PM] [Bot] Creating bot instance...
+[1:13:31 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:13:31 PM] [Bot] Using username: Slobot0084
+[1:14:42 PM] [Memory] Heap: 43.92 MB
+[1:15:45 PM] [Bot] Error: 
+[1:15:45 PM] [Bot] Disconnected: socketClosed
+[1:15:45 PM] [Cleanup] Clearing 0 intervals
+[1:15:45 PM] [Bot] Reconnecting in 16.707s (attempt #6)
+[1:16:01 PM] [Cleanup] Clearing 0 intervals
+[1:16:01 PM] [Bot] Creating bot instance...
+[1:16:01 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:16:01 PM] [Bot] Using username: Slobot0022
+[1:16:02 PM] [Bot] Kicked: {"text":""}
+[1:16:02 PM] [Cleanup] Clearing 0 intervals
+[1:16:03 PM] [Bot] Disconnected: socketClosed
+[1:16:03 PM] [Cleanup] Clearing 0 intervals
+[1:16:03 PM] [Bot] Reconnecting in 16.082s (attempt #7)
+[1:16:19 PM] [Cleanup] Clearing 0 intervals
+[1:16:19 PM] [Bot] Creating bot instance...
+[1:16:19 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:16:19 PM] [Bot] Using username: Slobot0012
+[1:18:11 PM] [Cleanup] Clearing 0 intervals
+[1:18:11 PM] [Control] Bot stopped
+[1:18:13 PM] [Bot] Already connecting, skipping duplicate createBot() call.
+[1:18:13 PM] [Control] Bot started
+[1:18:33 PM] [Bot] Error: 
+[1:18:33 PM] [Bot] Disconnected: socketClosed
+[1:18:33 PM] [Cleanup] Clearing 0 intervals
+[1:18:33 PM] [Bot] Reconnecting in 16.843s (attempt #8)
+[1:18:49 PM] [Bot] Creating bot instance...
+[1:18:49 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:18:49 PM] [Bot] Using username: Slobot0097
+[1:19:42 PM] [Memory] Heap: 35.49 MB
+[1:21:04 PM] [Bot] Error: connect ETIMEDOUT 193.56.156.149:41787
+[1:21:04 PM] [Bot] Disconnected: socketClosed
+[1:21:04 PM] [Cleanup] Clearing 0 intervals
+[1:21:04 PM] [Bot] Reconnecting in 16.626s (attempt #9)
+[1:21:21 PM] [Cleanup] Clearing 0 intervals
+[1:21:21 PM] [Bot] Creating bot instance...
+[1:21:21 PM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[1:21:21 PM] [Bot] Using username: Slobot0063

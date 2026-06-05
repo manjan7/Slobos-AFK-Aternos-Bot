@@ -1177,8 +1177,8 @@ function getReconnectDelay() {
   // coming back online before Aternos shuts it down permanently.
   if (botState.serverOffline) {
     botState.serverOffline = false;
-    const offlineDelay = 60000 + Math.floor(Math.random() * 30000);
-    addLog(`[Bot] Server offline back-off: ${Math.round(offlineDelay / 1000)}s`);
+    const offlineDelay = 300000 + Math.floor(Math.random() * 60000); // 5–6 min
+    addLog(`[Bot] Server offline back-off: ${Math.round(offlineDelay / 1000)}s (Aternos sleeping)`);
     return offlineDelay;
   }
 
@@ -1394,6 +1394,13 @@ function createBot() {
         botState.wasThrottled = true;
       }
 
+      // Empty kick {"text":""} = Aternos server is sleeping or restarting.
+      // Back off 5 min so we don't hammer a sleeping server.
+      if (kickReason === '{"text":""}' || kickReason.trim() === '{"text":""}') {
+        botState.serverOffline = true;
+        addLog("[Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry");
+      }
+
       if (
         reasonStr.includes("another location") ||
         reasonStr.includes("logged in from") ||
@@ -1425,6 +1432,13 @@ function createBot() {
       botState.connected = false;
       clearAllIntervals();
       spawnHandled = false; // reset for next connection
+
+      // keepAliveError = server stopped responding entirely (went offline/crashed).
+      // Back off 5 min so we don't hammer a sleeping Aternos server.
+      if (reason === "keepAliveError") {
+        botState.serverOffline = true;
+        addLog("[Bot] keepAliveError = server went offline — waiting 5 min before retry");
+      }
 
       if (
         config.discord &&
