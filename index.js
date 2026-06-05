@@ -1317,7 +1317,7 @@ function createBot() {
         config.discord.events.connect
       ) {
         sendDiscordWebhook(
-          `[+] **Connected** to \`${config.server.ip}\``,
+          `✅ **Bot Connected** — now online on the server!`,
           0x4ade80,
         );
       }
@@ -1399,6 +1399,9 @@ function createBot() {
       if (kickReason === '{"text":""}' || kickReason.trim() === '{"text":""}') {
         botState.serverOffline = true;
         addLog("[Bot] Empty kick = Aternos sleeping/restarting — waiting 5 min before retry");
+        if (config.discord && config.discord.enabled) {
+          sendDiscordWebhook(`😴 **Server is sleeping** — Aternos shut down. Bot will retry in 5 minutes.`, 0xfbbf24);
+        }
       }
 
       if (
@@ -1421,7 +1424,11 @@ function createBot() {
         config.discord.events &&
         config.discord.events.disconnect
       ) {
-        sendDiscordWebhook(`[!] **Kicked**: ${kickReason}`, 0xff0000);
+        // Strip any IP/hostname from kick reason before sending to Discord
+        const safeKickReason = kickReason
+          .replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?\b/g, "[hidden]")
+          .replace(new RegExp(config.server.ip.replace(/\./g, "\\."), "gi"), "[hidden]");
+        sendDiscordWebhook(`⚠️ **Bot Kicked**: ${safeKickReason}`, 0xff0000);
       }
       // NOTE: do NOT call scheduleReconnect() here - 'end' will fire right after 'kicked' and handle it
     });
@@ -1438,17 +1445,11 @@ function createBot() {
       if (reason === "keepAliveError") {
         botState.serverOffline = true;
         addLog("[Bot] keepAliveError = server went offline — waiting 5 min before retry");
-      }
-
-      if (
-        config.discord &&
-        config.discord.events &&
-        config.discord.events.disconnect
-      ) {
-        sendDiscordWebhook(
-          `[-] **Disconnected**: ${reason || "Unknown"}`,
-          0xf87171,
-        );
+        if (config.discord && config.discord.enabled) {
+          sendDiscordWebhook(`😴 **Server went offline** — bot will retry in 5 minutes.`, 0xfbbf24);
+        }
+      } else if (config.discord && config.discord.events && config.discord.events.disconnect) {
+        sendDiscordWebhook(`🔴 **Bot Disconnected** — reconnecting soon...`, 0xf87171);
       }
 
       // ALWAYS reconnect — bot must never leave the server
