@@ -1,0 +1,53 @@
+
+[9:30:02 AM] [KeepAlive] Self-ping started → https://slobos-afk-aternos-bot-szd4.onrender.com (every 10 min)
+[9:30:02 AM] ==================================================
+[9:30:02 AM]   Minecraft AFK Bot v2.5 - Bug-Fixed Edition
+[9:30:02 AM] ==================================================
+[9:30:02 AM] Server: stormsmp-s1-a4jA.aternos.me:41787
+[9:30:02 AM] Version: 1.21.1
+[9:30:02 AM] Auto-Reconnect: Enabled
+[9:30:02 AM] ==================================================
+[9:30:02 AM] [System] Production environment detected — starting Minecraft bot.
+[9:30:02 AM] [Bot] Creating bot instance...
+[9:30:02 AM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[9:30:04 AM] [Server] HTTP server started on port 10000 
+[9:30:38 AM] [Bot] Disconnected: socketClosed
+[9:30:38 AM] [Cleanup] Clearing 0 intervals
+[9:30:38 AM] [Bot] Reconnecting in 2.038s (attempt #1)
+[9:30:40 AM] [Cleanup] Clearing 0 intervals
+[9:30:40 AM] [Bot] Creating bot instance...
+[9:30:40 AM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[9:32:56 AM] [Bot] Error: 
+[9:32:56 AM] [Bot] Disconnected: socketClosed
+[9:32:56 AM] [Cleanup] Clearing 0 intervals
+[9:32:56 AM] [Bot] Reconnecting in 4.037s (attempt #2)
+[9:33:00 AM] [Cleanup] Clearing 0 intervals
+[9:33:00 AM] [Bot] Creating bot instance...
+[9:33:00 AM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[9:33:01 AM] [Bot] Error: connect ECONNREFUSED 193.56.156.156:41787
+[9:33:01 AM] [Bot] Disconnected: socketClosed
+[9:33:01 AM] [Cleanup] Clearing 0 intervals
+[9:33:01 AM] [Bot] Reconnecting in 8.303s (attempt #3)
+[9:33:10 AM] [Cleanup] Clearing 0 intervals
+[9:33:10 AM] [Bot] Creating bot instance...
+[9:33:10 AM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[9:33:10 AM] [Bot] Error: connect ECONNREFUSED 193.56.156.156:41787
+[9:33:10 AM] [Bot] Disconnected: socketClosed
+[9:33:10 AM] [Cleanup] Clearing 0 intervals
+[9:33:10 AM] [Bot] Reconnecting in 15.477s (attempt #4)
+[9:33:26 AM] [Cleanup] Clearing 0 intervals
+[9:33:26 AM] [Bot] Creating bot instance...
+[9:33:26 AM] [Bot] Connecting to stormsmp-s1-a4jA.aternos.me:41787
+[9:33:34 AM] [Bot] [+] Successfully spawned on server! (Version: 1.21.1)
+[9:33:34 AM] [Modules] Initializing all modules...
+[9:33:34 AM] [Modules] All modules initialized!
+[9:33:38 AM] [Bot] Bot died — respawning in 2s...
+[9:33:44 AM] [Auth] No prompt detected after 10s, sending /login as failsafe
+[9:33:58 AM] [Bot] Bot died — respawning in 2s...
+[9:34:08 AM] [Bot] Kicked: {"type":"compound","value":{"translate":{"type":"string","value":"multiplayer.disconnect.duplicate_login"}}}
+[9:34:08 AM] [Cleanup] Clearing 7 intervals
+[9:34:08 AM] [Bot] Duplicate-login kick — cascade #1, waiting before reconnecting
+[9:34:08 AM] [Bot] Disconnected: socketClosed
+[9:34:08 AM] [Cleanup] Clearing 0 intervals
+[9:34:08 AM] [Bot] Duplicate-login back-off: 95s (cascade #1)
+[9:34:08 AM] [Bot] Reconnecting in 94.632s (attempt #1)
