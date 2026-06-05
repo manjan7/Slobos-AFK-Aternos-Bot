@@ -453,7 +453,7 @@ app.get("/tutorial", (req, res) => {
               <li>Import your GitHub repo into <strong>Replit</strong>.</li>
               <li>Set the run command to <code>npm start</code>.</li>
               <li>Hit <strong>Run</strong> — the bot connects automatically.</li>
-              <li>The bot pings itself every 10 minutes to stay alive.</li>
+              <li>The bot pings itself every 5 minutes to stay alive.</li>
             </ol>
           </div>
 
@@ -1090,7 +1090,7 @@ function formatUptime(seconds) {
 // SELF-PING - Prevent Render from sleeping
 // FIX: only ping if RENDER_EXTERNAL_URL is set (skip useless localhost ping)
 // ============================================================
-const SELF_PING_INTERVAL = 10 * 60 * 1000;
+const SELF_PING_INTERVAL = 5 * 60 * 1000;
 
 function startSelfPing() {
   // Support Render.com and Replit published deployments
@@ -2188,12 +2188,13 @@ addLog(
 );
 addLog("=".repeat(50));
 
-// Only connect to Minecraft in the published deployment.
-// The dev environment runs the web server only — this prevents two instances
-// from fighting over the same username and causing rapid disconnect loops.
-if (process.env.REPLIT_DEPLOYMENT) {
+// Only connect to Minecraft in a published/deployed environment.
+// This prevents two instances fighting over the same username in local dev.
+const isProduction = process.env.REPLIT_DEPLOYMENT || process.env.RENDER_EXTERNAL_URL || process.env.RENDER;
+if (isProduction) {
+  addLog(`[System] Production environment detected — starting Minecraft bot.`);
   createBot();
 } else {
   addLog("[Dev] Running in dev mode — Minecraft bot is DISABLED here.");
-  addLog("[Dev] Publish the app to activate the bot in production.");
+  addLog("[Dev] Deploy to Render or publish on Replit to activate the bot.");
 }
