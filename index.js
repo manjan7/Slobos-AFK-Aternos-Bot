@@ -1257,8 +1257,15 @@ function createBot() {
       config.server.version && config.server.version.trim() !== ""
         ? config.server.version
         : false;
+    // Append a random 2-digit suffix so a lingering old session never
+    // causes a duplicate_login kick on reconnect.
+    const baseUsername = config["bot-account"].username.slice(0, 14); // max 16 chars
+    const suffix = String(Math.floor(Math.random() * 90) + 10); // 10-99
+    const activeUsername = baseUsername + suffix;
+    addLog(`[Bot] Using username: ${activeUsername}`);
+
     bot = mineflayer.createBot({
-      username: config["bot-account"].username,
+      username: activeUsername,
       password: config["bot-account"].password || undefined,
       auth: config["bot-account"].type,
       host: config.server.ip,
